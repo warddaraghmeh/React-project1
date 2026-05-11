@@ -14,6 +14,7 @@ const Home = () => {
         />
         <link rel="canonical" href="/" />
       </Helmet>
+
       <Header />
       <MainContent pageName="Home Page" />
       <Footer />
