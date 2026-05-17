@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 
 const ThemeContext = createContext();
 const initalData = {
-  theme: "light",
+  theme: localStorage.getItem("theme")=== null?"light":localStorage.getItem("theme"),
 };
 
 const reducer = (firstState, action) => {
@@ -19,11 +19,13 @@ const reducer = (firstState, action) => {
 
 export function ThemeProvider({ children }) {
   const [firstState, dispatch] = useReducer(reducer, initalData);
-  const toggleTheme = (ChangeTheme) =>
+  const toggleTheme = (ChangeTheme) => {
+    localStorage.setItem("theme", ChangeTheme);
     dispatch({
       type: "TOGGLE_THEME",
       newValue: ChangeTheme,
     });
+  };
   return (
     <ThemeContext.Provider value={{ ...firstState, toggleTheme }}>
       {children}
