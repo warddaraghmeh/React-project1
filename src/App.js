@@ -5,6 +5,8 @@ import Css from "./pages/css";
 import JavaScript from "./pages/javascript";
 import { useContext } from "react";
 import ThemeContext from "./context/ThemeContext";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SingUp";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,16 @@ const router = createBrowserRouter([
   {
     path: "/html",
     element: <Html />,
+    errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+    errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
     errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
   },
   {
