@@ -19,7 +19,7 @@ const Home = () => {
       </Helmet>
 
       <Header />
-      {user && <MainContent pageName="Home Page" />}
+      {user && <main> Welcome, {user.displayName}</main>}
       {!user && (
         <main>
           <p className="pls">

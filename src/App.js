@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home";
-import Html from "./pages/html";
+import About from "./pages/About";
 import Css from "./pages/css";
-import JavaScript from "./pages/javascript";
+import Profile from "./pages/Profile";
 import { useContext } from "react";
 import ThemeContext from "./context/ThemeContext";
 import SignIn from "./pages/SignIn";
@@ -15,8 +15,8 @@ const router = createBrowserRouter([
     errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
   },
   {
-    path: "/html",
-    element: <Html />,
+    path: "/about",
+    element: <About />,
     errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
   },
   {
@@ -35,8 +35,8 @@ const router = createBrowserRouter([
     errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
   },
   {
-    path: "/javascript",
-    element: <JavaScript />,
+    path: "/profile",
+    element: <Profile />,
     errorElement: <h1 style={{ color: "red" }}>Page Not Found</h1>,
   },
 ]);

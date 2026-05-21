@@ -59,4 +59,22 @@ form button:hover {
 .dark form p {
   color: #fff;
 }
-
+button:active {
+  background-color: #0056b3;
+  scale: 0.98;
+}
+@media (max-width: 600px) {
+  form {
+    width: 100%;
+    padding: 0 1rem;
+  }
+  input {
+    width: 100%;
+  }
+}
+button:hover {
+  scale: 1.05;
+  transition: scale 0.2s ease-in-out;
+  font-weight:500;
+  font-family : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
