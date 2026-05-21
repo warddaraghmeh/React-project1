@@ -41,12 +41,17 @@ form button:hover {
   text-align: center;
   font-size: 14px;
 }
-.account a {
+.account a,
+.pls a {
   color: #007bff;
   text-decoration: none;
 }
-.account a:hover {
+.account a:hover,
+.pls a:hover {
   text-decoration: underline;
+}
+.light .pls {
+  color: #111;
 }
 .light form p {
   color: #000;
@@ -54,3 +59,4 @@ form button:hover {
 .dark form p {
   color: #fff;
 }
+

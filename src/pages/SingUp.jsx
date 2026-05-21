@@ -2,17 +2,26 @@ import Header from "../comp/header";
 import Footer from "../comp/footer";
 import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase/config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [loading, setLoading] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setErrorMsg("");
 
     try {
       setLoading(true);
@@ -23,13 +32,25 @@ const SignUp = () => {
         password,
       );
 
-      console.log(userCredential.user);
+      await updateProfile(userCredential.user, {
+        displayName: username,
+      });
 
       setUsername("");
       setEmail("");
       setPassword("");
+
+      navigate("/");
     } catch (error) {
-      console.log(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setErrorMsg("This email is already in use");
+      } else if (error.code === "auth/invalid-email") {
+        setErrorMsg("Invalid email address");
+      } else if (error.code === "auth/weak-password") {
+        setErrorMsg("Password should be at least 6 characters");
+      } else {
+        setErrorMsg("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -47,16 +68,14 @@ const SignUp = () => {
       <main>
         <form onSubmit={handleSubmit}>
           <p style={{ fontSize: "23px" }}>
-            Create a new account<span>🧡</span>
+            Create a new account <span>🧡</span>
           </p>
 
           <input
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
 
@@ -64,9 +83,7 @@ const SignUp = () => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
@@ -74,11 +91,22 @@ const SignUp = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
+
+          {errorMsg && (
+            <p
+              style={{
+                color: "#ff4d4f",
+                marginTop: "10px",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            >
+              {errorMsg}
+            </p>
+          )}
 
           <button type="submit" disabled={loading}>
             {loading ? "Loading..." : "Sign Up"}

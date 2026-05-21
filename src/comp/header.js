@@ -4,7 +4,11 @@ import "./Header.css";
 import "../theme.css";
 import { useContext } from "react";
 import ThemeContext from "../context/ThemeContext";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
+import { signOut } from "firebase/auth";
 const Header = () => {
+  const [user, loading, error] = useAuthState(auth);
   const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <div>
@@ -19,34 +23,57 @@ const Header = () => {
           {theme === "light" ? "Dark Mode" : "Light Mode"}
         </button>
         <ul className="flex">
-          <li className="main-list">
-            <NavLink className="main-link" to="/signin">
-              Sign-in
-            </NavLink>
-          </li>
-          <li className="main-list">
-            <NavLink className="main-link" to="/signup">
-              Sign-up
-            </NavLink>
-          </li>
-          <li className="main-list">
-            <NavLink className="main-link" to="/html">
-              HTML
-            </NavLink>
-            <ul className="sub-ul">
-              <li>
-                <a href="/">Full Course</a>
-              </li>
-              <li>
-                <a href="/">Crash Course</a>
-              </li>
-              <li>
-                <a href="/">learn in 1h</a>
-              </li>
-            </ul>
-          </li>
+          {!user && (
+            <li className="main-list">
+              <NavLink className="main-link" to="/signin">
+                Sign-in
+              </NavLink>
+            </li>
+          )}
 
-          <li className="main-list">
+          {!user && (
+            <li className="main-list">
+              <NavLink className="main-link" to="/signup">
+                Sign-up
+              </NavLink>
+            </li>
+          )}
+          {user && (
+            <li
+              onClick={() => {
+                signOut(auth)
+                  .then(() => {
+                    console.log("User signed out successfully");
+                  })
+                  .catch((error) => {
+                    console.error("Error signing out: ", error);
+                  });
+              }}
+              className="main-list"
+            >
+              <NavLink className="main-link">Sign-Out</NavLink>
+            </li>
+          )}
+          {user && (
+            <li className="main-list">
+              <NavLink className="main-link" to="/html">
+                HTML
+              </NavLink>
+              <ul className="sub-ul">
+                <li>
+                  <a href="/">Full Course</a>
+                </li>
+                <li>
+                  <a href="/">Crash Course</a>
+                </li>
+                <li>
+                  <a href="/">learn in 1h</a>
+                </li>
+              </ul>
+            </li>
+          )}
+
+          {user && (<li className="main-list">
             <NavLink Link className="main-link" to="/javascript">
               JavaScript
             </NavLink>
@@ -55,7 +82,7 @@ const Header = () => {
                 <a href="/">coming soon🔥</a>
               </li>
             </ul>
-          </li>
+          </li>)}
         </ul>
       </header>
 
