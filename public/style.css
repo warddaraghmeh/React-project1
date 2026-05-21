@@ -61,10 +61,11 @@ h1 {
 
 .flex {
   display: flex;
+  align-items: center;
 }
 
 .main-list {
-  padding: 20px;
+  padding: 10px;
   font-size: 19px;
   position: relative;
 }
@@ -73,7 +74,8 @@ h1 {
   padding: 8px 15px;
 }
 
-.main-link:hover ,main-link.active {
+.main-link:hover,
+main-link.active {
   color: cyan;
   box-shadow: 0 0 5px cyan;
   border-radius: 5px;
@@ -87,7 +89,7 @@ h1 {
   display: none;
 
   position: absolute;
-  top: 69px;
+  top: 44px;
   left: -15px;
   border-top: 1px solid cyan;
 
@@ -161,7 +163,3 @@ main {
 
   text-align: center;
 }
-
-
-
- 
