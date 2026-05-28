@@ -3,8 +3,8 @@ body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+  color: #111; /* default for light mode */
 }
 
 .title,
@@ -91,4 +91,56 @@ button:hover {
 }
 .light .verify {
   color: #111;
+}
+.light .forgot-password {
+  background-color: rgb(73, 71, 71);
+}
+.light .close .fa-xmark {
+  color: #fff;
+}
+.light .check-email {
+  color: #eeebeb;
+}
+.dark .check-email {
+  color: #1b1a1a;
+}
+.light .profile {
+  color: #111;
+}
+.profileMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+}
+
+/* الصندوق نفسه */
+.profileBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 20px;
+  border-radius: 10px;
+
+  background-color: #fff;
+  color: #111; /* 🔥 مهم جدًا */
+}
+
+/* LIGHT MODE */
+.light .profileBox {
+  background-color: #ffffff;
+  color: #111;
+}
+
+/* DARK MODE */
+.dark .profileBox {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+/* عشان كل h6 ياخد نفس اللون */
+.profileBox h6 {
+  margin: 0;
+  font-weight: 400;
 }
