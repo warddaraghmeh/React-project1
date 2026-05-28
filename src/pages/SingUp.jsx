@@ -2,8 +2,13 @@ import Header from "../comp/header";
 import Footer from "../comp/footer";
 import { Helmet } from "react-helmet-async";
 import { auth } from "../firebase/config";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-
+import { useEffect } from "react";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +22,13 @@ const SignUp = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const navigate = useNavigate();
+  const [user, authLoading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user && user.emailVerified) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +43,7 @@ const SignUp = () => {
         email,
         password,
       );
-
+      await sendEmailVerification(auth.currentUser);
       await updateProfile(userCredential.user, {
         displayName: username,
       });
@@ -56,71 +68,110 @@ const SignUp = () => {
     }
   };
 
-  return (
-    <>
-      <Helmet>
-        <title>SignUp</title>
-        <link rel="canonical" href="/signup" />
-      </Helmet>
+  if (authLoading) {
+    return (
+      <>
+        <Header />
 
-      <Header />
+        <main>Loading...</main>
 
-      <main>
-        <form onSubmit={handleSubmit}>
-          <p style={{ fontSize: "23px" }}>
-            Create a new account <span>🧡</span>
-          </p>
-
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          {errorMsg && (
-            <p
-              style={{
-                color: "#ff4d4f",
-                marginTop: "10px",
-                fontSize: "14px",
-                fontWeight: "500",
+        <Footer />
+      </>
+    );
+  }
+  if (user) {
+    if (!user.emailVerified) {
+      return (
+        <>
+          <Header />
+          <main>
+            <p>Please verify your email address before logging in.</p>
+            <button
+              className="delete"
+              onClick={async () => {
+                try {
+                  await sendEmailVerification(auth.currentUser);
+                } catch (error) {
+                  console.error("Error sending email verification:", error);
+                }
               }}
             >
-              {errorMsg}
+              Resend again
+            </button>
+          </main>
+          <Footer />
+        </>
+      );
+    }
+  }
+
+  if (!user) {
+    return (
+      <>
+        <Helmet>
+          <title>SignUp</title>
+          <link rel="canonical" href="/signup" />
+        </Helmet>
+
+        <Header />
+
+        <main>
+          <form onSubmit={handleSubmit}>
+            <p style={{ fontSize: "23px" }}>
+              Create a new account <span>🧡</span>
             </p>
-          )}
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Loading..." : "Sign Up"}
-          </button>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
 
-          <p className="account">
-            Already have an account? <a href="/signin">SignIn</a>
-          </p>
-        </form>
-      </main>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-      <Footer />
-    </>
-  );
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            {errorMsg && (
+              <p
+                style={{
+                  color: "#ff4d4f",
+                  marginTop: "10px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                }}
+              >
+                {errorMsg}
+              </p>
+            )}
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Loading..." : "Sign Up"}
+            </button>
+
+            <p className="account">
+              Already have an account? <a href="/signin">SignIn</a>
+            </p>
+          </form>
+        </main>
+
+        <Footer />
+      </>
+    );
+  }
 };
 
 export default SignUp;

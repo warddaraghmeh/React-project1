@@ -150,7 +150,7 @@ main-link.active {
 ===================== */
 main {
   color: #1b1b1b;
-
+  flex-direction: column;
   height: calc(100vh - 128.64px);
 
   font-size: 30px;

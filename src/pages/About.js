@@ -11,24 +11,41 @@ const About = () => {
   const [user, loading, error] = useAuthState(auth);
   useEffect(() => {
     if (!user && !loading) {
-      navigate("/signin");
+      navigate("/");
+    }
+    if (user && !user.emailVerified) {
+      navigate("/");
     }
   }, [user, loading, navigate]);
-  return (
-    <>
-      <Helmet>
-        <title>About Page</title>
-        <meta
-          name="description"
-          content="Learn about our company and mission. Get to know the team behind the scenes and how we can help you achieve your web development goals."
-        />
-        <link rel="canonical" href="/about" />
-      </Helmet>
-      <Header />
-      <MainContent pageName="About Page" />
-      <Footer />
-    </>
-  );
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main>Loading...</main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (user) {
+    if (user.emailVerified) {
+      return (
+        <>
+          <Helmet>
+            <title>About Page</title>
+            <meta
+              name="description"
+              content="Learn about our company and mission. Get to know the team behind the scenes and how we can help you achieve your web development goals."
+            />
+            <link rel="canonical" href="/about" />
+          </Helmet>
+          <Header />
+          <MainContent pageName="About Page" />
+          <Footer />
+        </>
+      );
+    }
+  }
 };
 
 export default About;

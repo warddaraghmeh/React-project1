@@ -13,6 +13,9 @@ const Profile = () => {
     if (!user && !loading) {
       navigate("/");
     }
+    if (user && !user.emailVerified) {
+      navigate("/");
+    }
   }, [user, loading, navigate]);
   if (loading) {
     return (
@@ -38,17 +41,7 @@ const Profile = () => {
         <Helmet>
           <title>Profile Page</title>
           <style type="text/css">
-            {`.delete {
-          background-color: red;
-          color: white; 
-          margin-top: 20px;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          line-height: 1.5;
-          border-color: transparent;
-        }
+            {`
         }`}
           </style>
           <meta
@@ -68,7 +61,6 @@ const Profile = () => {
               alignItems: "flex-start",
               display: "flex",
               flexDirection: "column",
-              
             }}
           >
             <h6>userName:{user.displayName}</h6>
