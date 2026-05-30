@@ -5,6 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
 import { Link } from "react-router-dom";
 import { sendEmailVerification } from "firebase/auth";
+
 const Home = () => {
   const [user, loading, error] = useAuthState(auth);
 
@@ -12,7 +13,10 @@ const Home = () => {
     return (
       <>
         <Header />
-        <main>Loading...</main>
+        <main>
+          Loading...
+          <div className="loader"></div>
+        </main>
         <Footer />
       </>
     );
@@ -80,7 +84,9 @@ const Home = () => {
           <Header />
 
           <main>
-            <p className="verify">Please verify your email address before logging in.</p>
+            <p className="verify">
+              Please verify your email address before logging in.
+            </p>
             <button
               className="delete"
               onClick={() => {
